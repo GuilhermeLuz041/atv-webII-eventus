@@ -9,7 +9,7 @@ class Compra extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['data_compra'];
+    protected $fillable = ['data_compra', 'visitante_id', 'ingresso_id'];
 
     public function visitante()
     {

@@ -9,13 +9,13 @@ class Evento extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['nome', 'descricao', 'senha', 'data_evento', 'local'];
+    protected $fillable = ['nome', 'descricao', 'senha', 'data_evento', 'local', 'status_evento_id', 'categoria_id', 'organizador_id'];
 
     public function ingressos()
     {
         return $this->hasMany(Ingresso::class);
     }
-    
+
     public function status()
     {
         return $this->belongsTo(StatusEvento::class, 'status_evento_id');

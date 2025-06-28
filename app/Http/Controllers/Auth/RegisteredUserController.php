@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $roles = Role::all(); // busca todas as roles no banco
+        return view('auth.register', compact('roles'));
     }
 
     /**
@@ -30,15 +32,17 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nome' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'senha' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'string'],
+            'role_id' => ['required', 'exists:roles,id'],
         ]);
 
         $user = User::create([
-            'nome' => $request->nome,
+            'name' => $request->name,
             'email' => $request->email,
-            'senha' => Hash::make($request->senha),
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
         ]);
 
         event(new Registered($user));

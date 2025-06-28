@@ -10,7 +10,7 @@ class Administrador extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'user_id'];
 
     public function user()
     {

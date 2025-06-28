@@ -1,52 +1,62 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.home')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+@section('title', 'Registrar - Eventus')
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@section('content')
+<div class="max-w-md mx-auto px-6 py-12 min-h-[70vh] flex items-center justify-center">
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+  <!-- Formulário de registro -->
+  <div class="bg-[#EADACB] p-10 rounded-2xl shadow-lg w-full">
+    <h2 class="text-2xl font-semibold mb-6 text-[#0A2D35] text-center">Criar nova conta</h2>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+    <form method="POST" action="{{ route('register') }}" class="space-y-6">
+      @csrf
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-[#0A2D35] mb-2">Nome</label>
+        <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
+               class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] focus:border-[#0A2D35] transition" />
+        @error('name')
+          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+      <div>
+        <label for="email" class="block text-sm font-medium text-[#0A2D35] mb-2">Email</label>
+        <input id="email" type="email" name="email" value="{{ old('email') }}" required
+               class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] focus:border-[#0A2D35] transition" />
+        @error('email')
+          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+      <div>
+        <label for="password" class="block text-sm font-medium text-[#0A2D35] mb-2">Senha</label>
+        <input id="password" type="password" name="password" required
+               class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] focus:border-[#0A2D35] transition" />
+        @error('password')
+          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+      <div>
+        <label for="role_id" class="block text-sm font-medium text-[#0A2D35] mb-2">Perfil</label>
+        <select id="role_id" name="role_id" required
+                class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] focus:border-[#0A2D35] transition">
+          @foreach ($roles as $role)
+            <option value="{{ $role->id }}" @selected(old('role_id') == $role->id)>{{ ucfirst($role->nome) }}</option>
+          @endforeach
+        </select>
+        @error('role_id')
+          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
+      <button type="submit" class="w-full bg-[#0A2D35] text-white font-semibold py-3 rounded-lg hover:bg-[#08232A] transition">
+        Registrar
+      </button>
     </form>
-</x-guest-layout>
+  </div>
+
+</div>
+@endsection

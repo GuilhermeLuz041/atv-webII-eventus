@@ -12,9 +12,9 @@ class UserSeeder extends Seeder
     {
 
         $orgId = DB::table('users')->insertGetId([
-            'nome' => 'Organizador Exemplo',
+            'name' => 'Organizador Exemplo',
             'email' => 'org@example.com',
-            'senha' => Hash::make('123456'),
+            'password' => Hash::make('123456'),
             'role_id' => 2,
         ]);
 
@@ -24,9 +24,9 @@ class UserSeeder extends Seeder
 
 
         $visId = DB::table('users')->insertGetId([
-            'nome' => 'Visitante Exemplo',
+            'name' => 'Visitante Exemplo',
             'email' => 'visitante@example.com',
-            'senha' => Hash::make('123456'),
+            'password' => Hash::make('123456'),
             'role_id' => 1,
         ]);
 

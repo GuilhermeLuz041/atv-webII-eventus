@@ -15,13 +15,13 @@
             <header class="bg-[#0A2D35] text-white shadow-md">
                 <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
                     
-                    <a href="" class="flex items-center space-x-2">
+                    <a href="{{ url('/') }}" class="flex items-center space-x-2">
                         <img src="{{ asset('images/LogoEventus.svg') }}" alt="Logo" class="h-8 w-auto">
                         <span class="text-xl font-bold">Eventus</span>
                     </a>
 
                     <!-- Menu -->
-                    <nav class="space-x-4 text-sm md:text-base">
+                    <nav class="space-x-4 text-sm md:text-base flex items-center">
                         @auth
                             <a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a>
                             <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -29,8 +29,16 @@
                                 <button type="submit" class="hover:underline">Sair</button>
                             </form>
                         @else
-                            <a href="{{ route('login') }}" class="hover:underline">Entrar</a>
-                            <a href="{{ route('register') }}" class="hover:underline">Registrar</a>
+                            @if (request()->routeIs('register'))
+                                <a href="{{ url()->previous() }}" 
+                                class="bg-white text-[#0A2D35] px-4 py-2 rounded-md font-semibold hover:bg-gray-200 transition"
+                                >
+                                    &larr; Voltar
+                                </a>
+                            @else
+                                <a href="{{ route('login') }}" class="hover:underline">Entrar</a>
+                                <a href="{{ route('register') }}" class="hover:underline">Registrar</a>
+                            @endif
                         @endauth
                     </nav>
                 </div>

@@ -9,7 +9,7 @@ class Ingresso extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['preco', 'quantidade_total', 'quantidade_disponivel'];
+    protected $fillable = ['preco', 'quantidade_total', 'quantidade_disponivel', 'evento_id'];
 
     public function evento()
     {

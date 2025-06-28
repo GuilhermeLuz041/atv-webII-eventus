@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-10 items-center min-h-[70vh]">
 
-  <!-- Texto estilizado -->
+
   <div class="mx-auto max-w-lg space-y-5 text-center">
         <h1 class="text-5xl font-extrabold text-[#0A2D35] leading-tight mb-6">
             Bem-vindo ao <span class="text-[#0A2D35]">Eventus</span>!
@@ -28,7 +28,7 @@
         </p>
     </div>
 
-  <!-- Direita: formulário de login -->
+  
   <div class="bg-[#EADACB] p-10 rounded-2xl shadow-lg max-w-[40rem] mx-auto">
     <h2 class="text-2xl font-semibold mb-6 text-[#0A2D35] text-center">Entrar na conta</h2>
     <form method="POST" action="{{ route('login') }}" class="space-y-6">
@@ -39,8 +39,8 @@
                class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] focus:border-[#0A2D35] transition" />
       </div>
       <div>
-        <label for="senha" class="block text-sm font-medium text-[#0A2D35] mb-2">Senha</label>
-        <input type="password" name="senha" id="senha" required
+        <label for="password" class="block text-sm font-medium text-[#0A2D35] mb-2">Senha</label>
+        <input type="password" name="password" id="password" required
                class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] focus:border-[#0A2D35] transition" />
       </div>
       <button type="submit" class="w-full bg-[#0A2D35] text-white font-semibold py-3 rounded-lg hover:bg-[#08232A] transition">
