@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('descricao');
             $table->dateTime('data_evento');
             $table->string('local');
-            $table->foreignId('status_id')->constrained('status_evento')->onDelete('cascade');
+            $table->foreignId('status_evento_id')->constrained('status_eventos')->onDelete('cascade');
             $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
             $table->foreignId('organizador_id')->constrained('organizadores')->onDelete('cascade');
             $table->timestamps();

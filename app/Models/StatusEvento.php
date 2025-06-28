@@ -9,7 +9,7 @@ class StatusEvento extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['status'];
+    protected $fillable = ['nome'];
 
     public function eventos()
     {
