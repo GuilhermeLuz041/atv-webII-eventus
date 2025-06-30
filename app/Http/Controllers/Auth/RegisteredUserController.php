@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +21,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        $roles = Role::all(); // busca todas as roles no banco
+        $roles = Role::all(); 
         return view('auth.register', compact('roles'));
     }
 
@@ -45,10 +46,25 @@ class RegisteredUserController extends Controller
             'role_id' => $request->role_id,
         ]);
 
-        event(new Registered($user));
+        $now = now();
+        $data = ['user_id' => $user->id, 'created_at' => $now, 'updated_at' => $now];
 
+        if ($user->role->nome === 'visitante') {
+            DB::table('visitantes')->insert($data);
+        } elseif ($user->role->nome === 'organizador') {
+            DB::table('organizadores')->insert($data);
+        } elseif ($user->role->nome === 'administrador') {
+            DB::table('administradores')->insert($data);
+        }
+
+        event(new Registered($user));
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return match ($user->role->nome) {
+            'administrador' => redirect()->route('admin.dashboard'),
+            'organizador' => redirect()->route('organizer.dashboard'),
+            'visitante' => redirect()->route('visitor.dashboard'),
+            default => redirect('/'),
+        };
     }
 }

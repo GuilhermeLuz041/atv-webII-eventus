@@ -1,60 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@yield('title', 'Eventus')</title>
-        
-        <link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/svg+xml">
-        
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-        <body class="bg-[#F2E3D5] text-[#0A2D35] font-sans min-h-screen flex flex-col">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@yield('title', 'Eventus')</title>
 
-            <!-- Header -->
-            <header class="bg-[#0A2D35] text-white shadow-md">
-                <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-                    
-                    <a href="{{ url('/') }}" class="flex items-center space-x-2">
-                        <img src="{{ asset('images/LogoEventus.svg') }}" alt="Logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold">Eventus</span>
-                    </a>
+    <link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/svg+xml">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-[#F2E3D5] text-[#0A2D35] font-sans min-h-screen flex flex-col">
 
-                    <!-- Menu -->
-                    <nav class="space-x-4 text-sm md:text-base flex items-center">
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a>
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="hover:underline">Sair</button>
-                            </form>
-                        @else
-                            @if (request()->routeIs('register'))
-                                <a href="{{ url()->previous() }}" 
-                                class="bg-white text-[#0A2D35] px-4 py-2 rounded-md font-semibold hover:bg-gray-200 transition"
-                                >
-                                    &larr; Voltar
-                                </a>
-                            @else
-                                <a href="{{ route('login') }}" class="hover:underline">Entrar</a>
-                                <a href="{{ route('register') }}" class="hover:underline">Registrar</a>
-                            @endif
-                        @endauth
-                    </nav>
-                </div>
-            </header>
+    <!-- Header -->
+    <header class="bg-[#0A2D35] text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
 
-            
-            <main class="flex-1">
-                <div class="max-w-4xl mx-auto px-4 py-10">
-                    @yield('content')
-                </div>
-            </main>
+            <!-- Logo -->
+            <a href="{{ url('/') }}" class="flex items-center space-x-2">
+                <img src="{{ asset('images/LogoEventus.svg') }}" alt="Logo" class="h-8 w-auto">
+                <span class="text-xl font-bold">Eventus</span>
+            </a>
 
-            <!-- Footer -->
-            <footer class="bg-[#DECCBC] text-center text-sm text-[#0A2D35] py-4 shadow-inner">
-                &copy; {{ date('Y') }} Eventus. Todos os direitos reservados.
-            </footer>
+            <!-- Menu -->
+            <nav class="space-x-4 text-sm md:text-base flex items-center">
+                @auth
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="hover:underline">Sair</button>
+                    </form>
+                @else
+                    @if (request()->is('/'))
+                        <a href="{{ route('login') }}" class="hover:underline">Entrar</a>
+                        <a href="{{ route('register') }}" class="hover:underline">Registrar</a>
+                    @else
+                        <a href="{{ url()->previous() }}" 
+                           class="bg-white text-[#0A2D35] px-4 py-2 rounded-md font-semibold hover:bg-gray-200 transition">
+                            &larr; Voltar
+                        </a>
+                    @endif
+                @endauth
+            </nav>
+        </div>
+    </header>
 
-        </body>
+    <!-- Conteúdo principal -->
+    <main class="flex-1">
+        <div class="max-w-4xl mx-auto px-4 py-10">
+            @yield('content')
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#DECCBC] text-center text-sm text-[#0A2D35] py-4 shadow-inner">
+        &copy; {{ date('Y') }} Eventus. Todos os direitos reservados.
+    </footer>
+
+</body>
 </html>
