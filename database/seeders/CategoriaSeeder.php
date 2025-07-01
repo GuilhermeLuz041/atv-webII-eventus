@@ -13,6 +13,9 @@ class CategoriaSeeder extends Seeder
             ['nome' => 'Música'],
             ['nome' => 'Tecnologia'],
             ['nome' => 'Educação'],
+            ['nome' => 'Esportes'],
+            ['nome' => 'Artes Cênicas'],
+            ['nome' => 'Gastronomia'],
         ]);
     }
 }

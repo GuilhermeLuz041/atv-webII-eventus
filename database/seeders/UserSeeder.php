@@ -11,28 +11,37 @@ class UserSeeder extends Seeder
     public function run()
     {
 
-        $orgId = DB::table('users')->insertGetId([
-            'name' => 'Organizador Exemplo',
-            'email' => 'org@example.com',
+        $orgId1 = DB::table('users')->insertGetId([
+            'name' => 'Ana Organizador',
+            'email' => 'ana.organizador@example.com',
             'password' => Hash::make('123456'),
             'role_id' => 2,
         ]);
-
-        DB::table('organizadores')->insert([
-            'user_id' => $orgId,
+        DB::table('organizadores')->insert(['user_id' => $orgId1]);
+        
+        $orgId2 = DB::table('users')->insertGetId([
+            'name' => 'Bruno Organizador',
+            'email' => 'bruno.organizador@example.com',
+            'password' => Hash::make('123456'),
+            'role_id' => 2,
         ]);
+        DB::table('organizadores')->insert(['user_id' => $orgId2]);
 
-
-        $visId = DB::table('users')->insertGetId([
-            'name' => 'Visitante Exemplo',
-            'email' => 'visitante@example.com',
+        $visId1 = DB::table('users')->insertGetId([
+            'name' => 'Carlos Visitante',
+            'email' => 'carlos.visitante@example.com',
             'password' => Hash::make('123456'),
             'role_id' => 1,
         ]);
+        DB::table('visitantes')->insert(['user_id' => $visId1]);
 
-        DB::table('visitantes')->insert([
-            'user_id' => $visId,
+        $visId2 = DB::table('users')->insertGetId([
+            'name' => 'Diana Visitante',
+            'email' => 'diana.visitante@example.com',
+            'password' => Hash::make('123456'),
+            'role_id' => 1,
         ]);
+        DB::table('visitantes')->insert(['user_id' => $visId2]);
     }
 }
 

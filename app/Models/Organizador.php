@@ -11,6 +11,8 @@ class Organizador extends Model
 
     protected $fillable = ['nome', 'user_id'];
 
+    protected $table = 'organizadores';
+
     public function user()
     {
         return $this->belongsTo(User::class);

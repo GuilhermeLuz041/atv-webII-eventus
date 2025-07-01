@@ -2,59 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Models\Evento;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function visitorProfile()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = Auth::user();
+
+        $compras = $user->visitante->compras()->with('ingresso.evento')->get();
+
+        $eventos = $compras->map(fn($compra) => $compra->ingresso->evento);
+
+        return view('visitor.profile', compact('user', 'eventos'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function organizerProfile()
     {
-        $request->user()->fill($request->validated());
+        $user = Auth::user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+        $organizador_id = $user->organizador->id;
 
-        $request->user()->save();
+        $eventos = Evento::where('organizador_id', $organizador_id)->get();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return view('organizer.profile', compact('user', 'eventos'));
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function edit()
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
 
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+    public function update(Request $request)
+    {
     }
 }

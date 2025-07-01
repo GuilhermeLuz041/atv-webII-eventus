@@ -10,61 +10,50 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
+    
     public function create(): View
     {
-        $roles = Role::all(); 
+        $roles = Role::where('nome', '!=', 'administrador')->get();
         return view('auth.register', compact('roles'));
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string'],
             'role_id' => ['required', 'exists:roles,id'],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
+            'role_id'  => $request->role_id,
         ]);
 
         $now = now();
         $data = ['user_id' => $user->id, 'created_at' => $now, 'updated_at' => $now];
 
-        if ($user->role->nome === 'visitante') {
-            DB::table('visitantes')->insert($data);
-        } elseif ($user->role->nome === 'organizador') {
-            DB::table('organizadores')->insert($data);
-        } elseif ($user->role->nome === 'administrador') {
-            DB::table('administradores')->insert($data);
-        }
+        match ($user->role->nome) {
+            'visitante'     => DB::table('visitantes')->insert($data),
+            'organizador'   => DB::table('organizadores')->insert($data),
+            default         => null,
+        };
 
         event(new Registered($user));
         Auth::login($user);
 
         return match ($user->role->nome) {
             'administrador' => redirect()->route('admin.dashboard'),
-            'organizador' => redirect()->route('organizer.dashboard'),
-            'visitante' => redirect()->route('visitor.dashboard'),
-            default => redirect('/'),
+            'organizador'   => redirect()->route('organizer.dashboard'),
+            default         => redirect()->route('visitor.dashboard'),
         };
     }
 }
