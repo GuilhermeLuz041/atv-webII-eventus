@@ -10,7 +10,6 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-
         $orgId1 = DB::table('users')->insertGetId([
             'name' => 'Ana Organizador',
             'email' => 'ana.organizador@example.com',
@@ -42,6 +41,14 @@ class UserSeeder extends Seeder
             'role_id' => 1,
         ]);
         DB::table('visitantes')->insert(['user_id' => $visId2]);
+
+        $adminId = DB::table('users')->insertGetId([
+            'name' => 'Admin Principal',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('123456'),
+            'role_id' => 3,
+        ]);
+        DB::table('administradores')->insert(['user_id' => $adminId]);
+
     }
 }
-

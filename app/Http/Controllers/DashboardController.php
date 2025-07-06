@@ -4,19 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Evento;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
     public function visitor()
     {
         $user = Auth::user();
+      
+        $statusPermitidos = [1, 2]; 
+
+        $eventosDisponiveis = Evento::whereIn('status_evento_id', $statusPermitidos)
+            ->with(['ingressos'])
+            ->get();
 
         $compras = $user->visitante->compras()->with('ingresso.evento')->get();
         $eventosComprados = $compras->map(fn($compra) => $compra->ingresso->evento);
 
-        $todosEventos = Evento::all();
-
-        $eventos = $todosEventos->diff($eventosComprados);
+        $eventos = $eventosDisponiveis->diff($eventosComprados);
 
         return view('visitor.dashboard', compact('user', 'eventos'));
     }
@@ -36,6 +41,10 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        return view('admin.dashboard', compact('user'));
+        $totalUsuarios = User::count();
+        $totalEventos = Evento::count();
+        $eventosPendentes = Evento::where('status_evento_id', 3)->count(); 
+
+        return view('admin.dashboard', compact('totalUsuarios', 'totalEventos', 'eventosPendentes'));
     }
 }

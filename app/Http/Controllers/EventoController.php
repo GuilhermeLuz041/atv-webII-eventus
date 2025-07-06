@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Evento;
+use App\Models\Categoria;
+use App\Models\StatusEvento;
+use App\Models\Ingresso;
 use Illuminate\Http\Request;
 
 class EventoController extends Controller
@@ -16,7 +20,10 @@ class EventoController extends Controller
 
     public function create()
     {
-        return view('eventos.create');
+        $categorias = Categoria::all();
+        $status = StatusEvento::all();
+
+        return view('organizer.create', compact('categorias', 'status'));
     }
 
     public function store(Request $request)
@@ -26,15 +33,32 @@ class EventoController extends Controller
             'descricao' => 'required|string',
             'data_evento' => 'required|date',
             'local' => 'required|string|max:255',
-            'status_evento_id' => 'required|exists:status_eventos,id',
             'categoria_id' => 'required|exists:categorias,id',
-            'organizador_id' => 'required|exists:organizadores,id',
+            'preco_ingresso' => 'required|numeric|min:0',
+            'quantidade_total' => 'required|integer|min:1',
         ]);
 
-        Evento::create($request->all());
+        $organizador_id = Auth::user()->organizador->id;
 
-        return redirect()->route('eventos.index')->with('success', 'Evento criado com sucesso!');
+        $evento = Evento::create([
+            'nome' => $request->nome,
+            'descricao' => $request->descricao,
+            'data_evento' => $request->data_evento,
+            'local' => $request->local,
+            'status_evento_id' => 3,
+            'categoria_id' => $request->categoria_id,
+            'organizador_id' => $organizador_id,
+        ]);
+
+        $evento->ingressos()->create([  
+            'preco' => $request->preco_ingresso,
+            'quantidade_total' => $request->quantidade_total,
+            'quantidade_disponivel' => $request->quantidade_total,
+        ]);
+
+        return redirect()->route('organizer.dashboard')->with('success', 'Evento criado e está pendente de aprovação pelo administrador.');
     }
+
 
     public function show(Evento $evento)
     {
@@ -43,7 +67,12 @@ class EventoController extends Controller
 
     public function edit(Evento $evento)
     {
-        return view('eventos.edit', compact('evento'));
+        $evento->load('ingressos');
+
+        $categorias = Categoria::all();
+        $status = StatusEvento::all();
+
+        return view('organizer.edit', compact('evento', 'categorias', 'status'));
     }
 
     public function update(Request $request, Evento $evento)
@@ -55,12 +84,11 @@ class EventoController extends Controller
             'local' => 'required|string|max:255',
             'status_evento_id' => 'required|exists:status_eventos,id',
             'categoria_id' => 'required|exists:categorias,id',
-            'organizador_id' => 'required|exists:organizadores,id',
         ]);
 
         $evento->update($request->all());
 
-        return redirect()->route('eventos.index')->with('success', 'Evento atualizado com sucesso!');
+        return redirect()->route('organizer.dashboard')->with('success', 'Evento atualizado com sucesso!');
     }
 
     public function destroy(Evento $evento)

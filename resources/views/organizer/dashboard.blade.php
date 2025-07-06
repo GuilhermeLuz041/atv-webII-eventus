@@ -18,6 +18,13 @@
     <section class="flex-1">
         <h1 class="text-3xl font-bold mb-4">Meus Eventos</h1>
 
+        <div class="mb-6 flex justify-left">
+            <a href="{{ route('eventos.create') }}" 
+            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition text-sm shadow hover:shadow-lg">
+                + Criar Evento
+            </a>
+        </div>
+
         @if($eventos->isEmpty())
             <p class="text-gray-600">Você ainda não criou nenhum evento.</p>
         @else
@@ -29,9 +36,19 @@
                             <p class="text-sm text-gray-600 mb-1">{{ $evento->descricao }}</p>
                             <p class="text-sm"><strong>Data:</strong> {{ \Carbon\Carbon::parse($evento->data_evento)->format('d/m/Y H:i') }}</p>
                             <p class="text-sm"><strong>Local:</strong> {{ $evento->local }}</p>
+
+                            @php
+                                $menorPreco = $evento->ingressos->min('preco');
+                                $totalIngressosRestantes = $evento->ingressos->sum('quantidade_disponivel');
+                            @endphp
+
+                            <p class="text-sm"><strong>Preço a partir de:</strong> R$ {{ number_format($menorPreco, 2, ',', '.') }}</p>
+                            <p class="text-sm"><strong>Ingressos restantes:</strong> {{ $totalIngressosRestantes }}</p>
                         </div>
+
                         <div class="ml-4 self-center">
-                            <a href="" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">
+                            <a href="{{ route('eventos.edit', $evento->id) }}" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">
                                 Editar
                             </a>
                         </div>

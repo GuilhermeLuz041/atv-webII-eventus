@@ -2,33 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Compra;
+use App\Models\Evento;
 use Illuminate\Http\Request;
 
 class CompraController extends Controller
 {
-    public function index()
-    {
-        $compras = Compra::with(['visitante', 'ingresso'])->paginate(10);
-        return view('compras.index', compact('compras'));
-    }
 
-    public function create()
+    public function store(Evento $evento)
     {
-        return view('compras.create');
-    }
+        $ingresso = $evento->ingressos()->where('quantidade_disponivel', '>', 0)->first();
+        
+        $ingresso->quantidade_disponivel -= 1;
+        $ingresso->save();
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'data_compra' => 'required|date',
-            'visitante_id' => 'required|exists:visitantes,id',
-            'ingresso_id' => 'required|exists:ingressos,id',
+        Compra::create([
+            'visitante_id' => Auth::user()->visitante->id,
+            'ingresso_id' => $ingresso->id,
+            'quantidade' => 1,
+            'data_compra' => now(),
         ]);
 
-        Compra::create($request->all());
-
-        return redirect()->route('compras.index')->with('success', 'Compra registrada com sucesso!');
+        return back()->with('success', 'Compra realizada com sucesso!');
     }
 
 }

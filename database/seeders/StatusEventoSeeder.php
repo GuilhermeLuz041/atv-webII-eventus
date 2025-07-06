@@ -12,6 +12,8 @@ class StatusEventoSeeder extends Seeder
         DB::table('status_eventos')->insert([
             ['nome' => 'ingressos disponíveis'],
             ['nome' => 'ingressos indisponíveis'],
+            ['nome' => 'pendente'],
+            ['nome' => 'rejeitado'],
         ]);
     }
 }
