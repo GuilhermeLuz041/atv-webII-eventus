@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
       
-        $statusPermitidos = [1, 2]; 
+        $statusPermitidos = [1]; 
 
         $eventosDisponiveis = Evento::whereIn('status_evento_id', $statusPermitidos)
             ->with(['ingressos'])
@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
         $organizador_id = $user->organizador->id;
 
-        $eventos = Evento::where('organizador_id', $organizador_id)->get();
+        $eventos = Evento::where('organizador_id', $organizador_id)->with(['ingressos', 'status']) ->get();
 
         return view('organizer.dashboard', compact('user', 'eventos'));
     }

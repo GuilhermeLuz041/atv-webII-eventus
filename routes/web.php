@@ -34,9 +34,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/eventos/{id}/editar', [AdminController::class, 'edit'])->name('admin.eventos.edit'); 
         Route::put('/admin/eventos/{id}', [AdminController::class, 'update'])->name('admin.eventos.update'); 
         Route::get('/admin/eventos/pendentes', [AdminController::class, 'eventosPendentes'])->name('admin.eventos.pendentes');
-        Route::post('/admin/eventos/{evento}/aprovar', [AdminController::class, 'aprovarEvento'])->name('admin.eventos.aprovar');
-        Route::post('/admin/eventos/{evento}/rejeitar', [AdminController::class, 'rejeitarEvento'])->name('admin.eventos.rejeitar');
+        Route::post('/admin/eventos/{evento}/aprovar', [AdminController::class, 'aprovar'])->name('admin.eventos.aprovar');
+        Route::post('/admin/eventos/{evento}/rejeitar', [AdminController::class, 'rejeitar'])->name('admin.eventos.rejeitar');
+        Route::get('/admin/usuarios/criar', [AdminController::class, 'createAdmin'])->name('admin.usuarios.create');
+        Route::post('/admin/usuarios', [AdminController::class, 'storeAdmin'])->name('admin.usuarios.store');
+        Route::get('/admin/usuarios', [AdminController::class, 'listarUsuarios'])->name('admin.usuarios.index');
+        Route::get('/admin/usuarios/{user}/editar', [AdminController::class, 'editarUsuario'])->name('admin.usuarios.edit');
+        Route::put('/admin/usuarios/{user}', [AdminController::class, 'atualizarUsuario'])->name('admin.usuarios.update');
+        Route::delete('/admin/usuarios/{user}', [AdminController::class, 'destroy'])->name('admin.usuarios.destroy');
     });
+
+    Route::middleware('auth')->delete('/evento/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
+
 });
 
 require __DIR__.'/auth.php';

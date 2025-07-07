@@ -37,12 +37,23 @@
                             <p class="text-sm"><strong>Ingressos restantes:</strong> {{ $totalIngressosRestantes }}</p>
                         </div>
 
-                        <div class="ml-4 self-center">
+                        <div class="ml-4 self-center flex gap-2">
                             <a href="{{ route('eventos.edit', $evento->id) }}" 
-                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">
+                            class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
                                 Editar
                             </a>
+
+                            <form action="{{ route('eventos.destroy', $evento->id) }}" method="POST" 
+                                onsubmit="return confirm('Tem certeza que deseja deletar este evento?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                                    Deletar
+                                </button>
+                            </form>
                         </div>
+                        
                     </div>
                 @endforeach
         </div>

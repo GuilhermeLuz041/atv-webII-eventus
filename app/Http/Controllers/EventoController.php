@@ -95,6 +95,6 @@ class EventoController extends Controller
     {
         $evento->delete();
 
-        return redirect()->route('eventos.index')->with('success', 'Evento removido com sucesso!');
+        return redirect()->back()->with('success', 'Evento deletado com sucesso.');
     }
 }
