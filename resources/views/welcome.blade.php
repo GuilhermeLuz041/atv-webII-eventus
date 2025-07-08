@@ -42,6 +42,13 @@
         <label for="password" class="block text-sm font-medium text-[#0A2D35] mb-2">Senha</label>
         <input type="password" name="password" id="password" required
                class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] focus:border-[#0A2D35] transition" />
+        
+        <div class="text-center mt-2">
+          <a href="{{ route('password.request') }}" class="text-sm text-[#0A2D35] underline hover:text-[#074440]">
+            Esqueceu a senha?
+          </a>
+        </div>
+
       </div>
       <button type="submit" class="w-full bg-[#0A2D35] text-white font-semibold py-3 rounded-lg hover:bg-[#08232A] transition">
         Entrar

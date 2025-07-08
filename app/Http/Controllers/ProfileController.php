@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Evento;
+use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller
 {
@@ -30,13 +31,15 @@ class ProfileController extends Controller
         return view('organizer.profile', compact('user', 'eventos'));
     }
 
+    public function update(Request $request)
+    {
+    }
+
+
     public function edit()
     {
         $user = Auth::user();
         return view('profile.edit', compact('user'));
     }
 
-    public function update(Request $request)
-    {
-    }
 }
