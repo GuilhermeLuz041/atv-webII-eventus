@@ -5,6 +5,7 @@ use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\IngressoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,7 @@ Route::middleware('auth')->group(function () {
         route::get('/visitor/edit/profile', [ProfileController::class, 'edit'])->name('visitante.profile.edit');
         Route::put('/visitor/edit/profile', [ProfileController::class, 'update'])->name('visitante.profile.update');
         Route::post('visitor/comprar/{evento}', [CompraController::class, 'store'])->name('compras.store');
+        Route::delete('/compras/{compra}', [CompraController::class, 'cancelar'])->name('compras.cancelar');
     });
     Route::middleware('role:organizador')->group(function () {
         Route::get('/organizer/dashboard', [DashboardController::class, 'organizer'])->name('organizer.dashboard');
@@ -26,6 +28,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/organizer/evento', [EventoController::class, 'store'])->name('eventos.store');
         Route::get('/organizer/evento/{evento}/editar', [EventoController::class, 'edit'])->name('eventos.edit');
         Route::put('/organizer/evento/{evento}', [EventoController::class, 'update'])->name('eventos.update');
+        Route::put('/perfil/organizador', [ProfileController::class, 'update'])->name('organizer.profile.update');
     });
     Route::middleware('role:administrador')->group(function () {
         Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
@@ -45,6 +48,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('auth')->delete('/evento/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
+
+    Route::get('/ingressos/pdf/{evento}', [IngressoController::class, 'gerarPdf'])->name('ingresso.pdf');
+
+
 
 });
 

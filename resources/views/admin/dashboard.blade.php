@@ -7,6 +7,7 @@
 
     <h1 class="text-4xl font-extrabold mb-12 text-center text-gray-800">Dashboard Administrativa</h1>
 
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
         <div class="bg-[#DECCBC] p-8 rounded-3xl shadow-lg text-center flex flex-col items-center justify-center">

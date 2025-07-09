@@ -7,9 +7,15 @@
 
     <aside class="w-full md:w-1/3 bg-[#DECCBC] p-6 rounded-3xl shadow-md h-fit md:h-[240px] overflow-hidden">
         <a href="{{ route('visitor.profile') }}" class="block text-center no-underline hover:no-underline">
-            <div class="w-24 h-24 mx-auto rounded-full bg-[#D4C2B1] flex items-center justify-center text-3xl font-bold text-[#0A2D35]">
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-            </div>
+            @if(auth()->user()->avatar_path)
+                <img src="{{ asset('storage/' . auth()->user()->avatar_path) }}" 
+                    alt="Avatar" 
+                    class="w-24 h-24 mx-auto rounded-full object-cover mb-4 border-2 border-[#0A2D35]">
+            @else
+                <div class="w-24 h-24 mx-auto rounded-full bg-[#D4C2B1] flex items-center justify-center text-3xl font-bold text-[#0A2D35]">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
+            @endif
             <h2 class="text-xl font-semibold mt-4">{{ auth()->user()->name }}</h2>
             <p class="text-sm text-gray-700">{{ auth()->user()->email }}</p>
         </a>
@@ -17,6 +23,18 @@
 
     <section class="flex-1">
         <h1 class="text-3xl font-bold mb-4">Eventos Disponíveis</h1>
+
+        @if(session('success'))
+            <div class="mb-6 p-4 rounded-lg bg-green-100 border border-green-400 text-green-800">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
 
         @if($eventos->isEmpty())
             <p class="text-gray-600">Não há eventos disponíveis para compra no momento.</p>

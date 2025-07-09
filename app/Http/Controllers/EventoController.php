@@ -31,7 +31,7 @@ class EventoController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'required|string',
-            'data_evento' => 'required|date',
+            'data_evento' => ['required', 'date', 'after_or_equal:' . now()->addDays(2)->startOfDay()->toDateTimeString()],
             'local' => 'required|string|max:255',
             'categoria_id' => 'required|exists:categorias,id',
             'preco_ingresso' => 'required|numeric|min:0',
@@ -80,9 +80,8 @@ class EventoController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'required|string',
-            'data_evento' => 'required|date',
             'local' => 'required|string|max:255',
-            'status_evento_id' => 'required|exists:status_eventos,id',
+            'data_evento' => ['required', 'date', 'after_or_equal:' . now()->addDays(2)->startOfDay()->toDateTimeString()],
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 

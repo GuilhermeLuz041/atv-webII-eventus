@@ -6,6 +6,18 @@
 <div class="max-w-5xl mx-auto py-8">
     <h1 class="text-3xl font-bold mb-8">Gerenciar Eventos</h1>
 
+    @if(session('success'))
+        <div class="mb-6 p-4 rounded-lg bg-green-100 border border-green-400 text-green-800">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
     @if($eventos->isEmpty())
         <p class="text-gray-600">Nenhum evento encontrado.</p>
     @else

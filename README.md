@@ -7,6 +7,8 @@ Usuários podem se cadatrar com visitantes ou organizadores para começarem a ut
   - Laravel Breeze – Sistema de autenticação
   - Tailwind CSS – Estilização 
   - Docker – Para ambiente de desenvolvimento 
+  - DomPDF – Geração de PDF
+  - Laravel Storage – Upload de foto de perfil
 
 ## 🎲 Funcionalidades
 
@@ -47,7 +49,9 @@ Administradores:
     - Acessar o container e rodar migrations
         - winpty docker exec -it laravel-app bash
         - php artisan migrate --seed
-
+    
+    - Ativar armazenamento público
+        - php artisan storage:link
 
 ## 🧪 Usuários teste
 

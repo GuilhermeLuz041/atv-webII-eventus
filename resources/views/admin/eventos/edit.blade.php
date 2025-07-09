@@ -32,8 +32,13 @@
 
       <div>
         <label for="data_evento" class="block text-sm font-medium text-[#0A2D35] mb-2">Data e Hora</label>
-        <input id="data_evento" type="datetime-local" name="data_evento" value="{{ old('data_evento', \Carbon\Carbon::parse($evento->data_evento)->format('Y-m-d\TH:i')) }}" required
-               class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] transition" />
+        @php
+          $minDate = \Carbon\Carbon::now()->addDays(2)->format('Y-m-d\TH:i');
+        @endphp
+        <input id="data_evento" type="datetime-local" name="data_evento" 
+          min="{{ $minDate }}"
+          value="{{ old('data_evento', \Carbon\Carbon::parse($evento->data_evento)->format('Y-m-d\TH:i')) }}" required
+          class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0A2D35] transition" />
         @error('data_evento')
           <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
         @enderror
@@ -60,22 +65,6 @@
           @endforeach
         </select>
         @error('categoria_id')
-          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-        @enderror
-      </div>
-
-      <div>
-        <label for="status_evento_id" class="block text-sm font-medium text-[#0A2D35] mb-2">Status</label>
-        <select id="status_evento_id" name="status_evento_id" required
-                class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A2D35] transition">
-          <option value="">Selecione o status</option>
-          @foreach($status as $s)
-            <option value="{{ $s->id }}" @selected(old('status_evento_id', $evento->status_evento_id) == $s->id)>
-              {{ $s->nome }}
-            </option>
-          @endforeach
-        </select>
-        @error('status_evento_id')
           <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
         @enderror
       </div>

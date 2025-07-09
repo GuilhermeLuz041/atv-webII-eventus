@@ -27,4 +27,23 @@ class CompraController extends Controller
         return back()->with('success', 'Compra realizada com sucesso!');
     }
 
+    public function cancelar(Compra $compra)
+    {
+        $user = Auth::user();
+
+        $visitante = $user->visitante;
+
+        $compra->load('ingresso');
+
+        if (!$compra->ingresso) {
+            return redirect()->back()->with('error', 'Ingresso não encontrado para esta compra.');
+        }
+
+        $compra->ingresso->increment('quantidade_disponivel');
+
+        $compra->delete();
+
+        return redirect()->back()->with('success', 'Compra cancelada com sucesso.');
+    }
+
 }

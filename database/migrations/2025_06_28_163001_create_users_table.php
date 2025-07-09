@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('password');
+            $table->string('avatar_path')->nullable();
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
